@@ -116,7 +116,8 @@
         (let ((dired-quick-sort-suppress-setup-warning 'message))
           (dired-quick-sort-setup))))
     :config
-    (evil-define-key 'normal dired-mode-map "s" 'hydra-dired-quick-sort/body)))
+    ;; (evil-define-key 'normal dired-mode-map "s" 'hydra-dired-quick-sort/body)
+    ))
 
 (defun spacemacs-editing/init-drag-stuff ()
   (use-package drag-stuff
