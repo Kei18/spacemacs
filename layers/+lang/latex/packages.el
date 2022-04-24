@@ -75,6 +75,11 @@
     (progn
       ;; otherwise `, p` preview commands doesn't work
       (require 'preview)
+      ;; when `latex-view-with-pdf-tools' is non-nil, configure pdf-tools for
+
+      ;; viewing output pdf's
+      (spacemacs//latex-setup-pdf-tools)
+
       ;; Key bindings for plain TeX
       (dolist (mode '(tex-mode latex-mode context-mode))
         (spacemacs/set-leader-keys-for-major-mode mode

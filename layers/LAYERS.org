@@ -12,6 +12,7 @@
   - [[#syntax-checking][Syntax Checking]]
 - [[#completion][Completion]]
   - [[#auto-completion][Auto-completion]]
+  - [[#compleseus][Compleseus]]
   - [[#helm][Helm]]
   - [[#ivy][Ivy]]
   - [[#templates][Templates]]
@@ -123,6 +124,7 @@
     - [[#phoenix][Phoenix]]
     - [[#react][React]]
     - [[#ruby-on-rails][Ruby on Rails]]
+    - [[#svelte][Svelte]]
     - [[#vue][Vue]]
   - [[#general-purpose][General-purpose]]
     - [[#imperative][Imperative]]
@@ -180,6 +182,7 @@
 - [[#readers][Readers]]
   - [[#dash][Dash]]
   - [[#deft][Deft]]
+  - [[#djvu][Djvu]]
   - [[#elfeed][Elfeed]]
   - [[#epub][Epub]]
   - [[#pdf][PDF]]
@@ -243,6 +246,7 @@
   - [[#tide-layer][Tide Layer]]
   - [[#tmux][Tmux]]
   - [[#transmission][Transmission]]
+  - [[#tree-sitter][Tree-sitter]]
   - [[#vagrant][Vagrant]]
   - [[#web-beautify][Web-beautify]]
   - [[#xclipboard][Xclipboard]]
@@ -256,8 +260,13 @@
   - [[#confluence][Confluence]]
   - [[#eaf][Eaf]]
   - [[#evernote][Evernote]]
+  - [[#hacker-news][Hacker News]]
+  - [[#layer-for-reddit][Layer for reddit]]
+  - [[#lobsters][Lobsters]]
   - [[#pocket][Pocket]]
   - [[#search-engine][Search Engine]]
+  - [[#streamlink][Streamlink]]
+  - [[#twitch][Twitch]]
   - [[#twitter][Twitter]]
   - [[#wakatime][Wakatime]]
 
@@ -356,6 +365,21 @@ Features:
 - Integration with [[https://github.com/capitaomorte/yasnippet][yasnippet]] and [[https://github.com/abo-abo/auto-yasnippet][auto-yasnippet]]
 - Automatic configuration of [[https://www.emacswiki.org/emacs/HippieExpand][hippie-expand]]
 - Automatic docstring tooltips are provided by [[https://github.com/expez/company-quickhelp][company-quickhelp]]
+
+** Compleseus
+[[file:+completion/compleseus/README.org][+completion/compleseus/README.org]]
+
+This layer adds a new way of completion provided by the following core packages:
+- =consult=
+- =embark=
+- =marginalia=
+- =orderless=
+- =selectrum= or =vertico=
+
+This is an WIP and only supports emacs 27 or later. Please contribute.
+
+Features:
+- Same features as =ivy= or =helm=
 
 ** Helm
 [[file:+completion/helm/README.org][+completion/helm/README.org]]
@@ -498,6 +522,7 @@ Features:
 - Easy insert of URLs from clipboard with org format via [[https://github.com/rexim/org-cliplink][org-cliplink]]
 - Rich insert of code (into a source block with highlighting, and a link) from other buffers via [[https://github.com/unhammer/org-rich-yank][org-rich-yank]]
 - Pixel-perfect visual alignment for Org and Markdown tables via [[https://github.com/casouri/valign][valign]]
+- Text transclusion via [[https://nobiot.github.io/org-transclusion][org-transclusion]]
 
 ** Outshine
 [[file:+emacs/outshine/README.org][+emacs/outshine/README.org]]
@@ -876,6 +901,7 @@ Features:
 - Highlighting of different indentations
 - Automatic highlighting of numbers
 - Automatic highlighting of parentheses
+- Adaptive cursor shape in terminal, as it would be in GUI
 
 ** Spacemacs-evil
 [[file:+spacemacs/spacemacs-evil/README.org][+spacemacs/spacemacs-evil/README.org]]
@@ -1086,8 +1112,10 @@ This layer adds tools for better integration of Emacs in NixOS.
 
 Features:
 - Nix-mode using [[https://github.com/NixOS/nix-mode][nix-mode]]
+- Automatic formatting via [[https://github.com/serokell/nixfmt][nixfmt]]
 - Auto-completion of NixOS Options using [[https://github.com/travisbhartwell/nix-emacs/blob/master/company-nixos-options.el][company-nixos-options]]
 - Helm Lookup for NixOS Options [[https://github.com/travisbhartwell/nix-emacs/blob/master/helm-nixos-options.el][helm-nixos-options]]
+- WIP support for LSP backend using =rnix-lsp=
 
 ** OSX
 [[file:+os/osx/README.org][+os/osx/README.org]]
@@ -1213,6 +1241,7 @@ Features:
 - Syntax highlighting for BibTeX and BibLaTeX files.
 - Utilities for automatically adding entries from different data sources.
 - Support for inserting citations in various other modes.
+- Optionally install full fledged [[https://joostkremers.github.io/ebib/ebib-manual.html][ebib reference manager]]
 
 **** CSV
 [[file:+lang/csv/README.org][+lang/csv/README.org]]
@@ -1324,7 +1353,7 @@ a major-mode for [[http://plantuml.com][plantuml]]. PlantUML is a tool to genera
 
 For help with how to use plantuml, see the [[http://plantuml.com][plantuml website]] and the [[http://plantuml.com/guide][reference guide]].
 
-The official file extension supported by this layer is =.pum=. If you want something else,
+The official file extension supported by this layer is =.pum=. and =.puml=. If you want something else,
 set it in your =user-config= function of your =~/.spacemacs= file.
 
 For example, the following diagram can be defined as follows:
@@ -1442,6 +1471,7 @@ Features:
 - =Sh= scripts linting using [[https://www.shellcheck.net/][shellcheck]]
 - =Sh= scripts style checking using [[https://github.com/openstack-dev/bashate][bashate]]
 - Support for the [[https://langserver.org/][Language Server Protocol]] (experimental)
+- Automatic formatting via [[https://github.com/mvdan/sh][shfmt]]
 
 **** Vimscript language
 [[file:+lang/vimscript/README.org][+lang/vimscript/README.org]]
@@ -1472,7 +1502,7 @@ This layer adds support for the [[https://coq.inria.fr/][Coq]] proof assistant (
 Features:
 - Syntax highlighting
 - Syntax-checking
-- Auto-completion
+- Auto-completion (requires the [[https://develop.spacemacs.org/layers/+completion/auto-completion/README.html][auto-completion layer]] to be installed)
 - Debugging of mathematical proofs from within Emacs using a special proof layout
 - Replacement of certain constants with the correct mathematical signs
 - Inserting of certain preconfigured proof elements
@@ -1715,6 +1745,26 @@ Features:
 - Rake runner
 - Interactive Rails console
 
+*** Svelte
+[[file:+frameworks/svelte/README.org][+frameworks/svelte/README.org]]
+
+Layer for Svelte, for working with =.svelte= files.
+
+Note: This layer creates a derived mode called =svelte-mode= on the fly out of
+=web-mode= to handle svelte files. It will conflict with the [[https://github.com/AdamNiederer/svelte-mode][svelte-mode package]], make sure
+you don't use that package together with this layer.
+
+Features:
+- Wholesome features from =web-mode=, especially on template part
+- Better performance
+- On-the-fly syntax checking with =eslint=
+- Proper syntax highlight and indentation with =svelte-mode=
+- Two options for backend support for autocompletion and code analysis: =lsp= and =dumb=
+- Code autocompletion with =company-mode=
+- Formatting code with =prettier= layer
+- =evil-matchit= =%= to jump between open and close tags
+- =emmet-mode= and =yasnippet= for code expanding with the =TAB= key
+
 *** Vue
 [[file:+frameworks/vue/README.org][+frameworks/vue/README.org]]
 
@@ -1854,7 +1904,8 @@ Features:
 - Auto-completion via company (=auto-completion= layer required)
 - Support code reformatting with [[http://clang.llvm.org/docs/ClangFormat.html][clang-format]].
 - Support for disassembly of code with [[https://github.com/jart/disaster][disaster]].
-- =sematic= layer integration:
+- [[https://www.doxygen.nl][Doxygen]] code documentation comment generation (using [[https://github.com/mp81ss/gendoxy][gendoxy]]).
+- =semantic= layer integration:
   - Function or variable definition at the bottom
   - Current function cursor is at the top. See [[https://github.com/tuhdo/semantic-stickyfunc-enhance][stickyfunc-demos]] for
     demos in some programming languages.
@@ -1949,6 +2000,7 @@ Features:
 - Outline
 - Workspace Symbols
 - Code Folding
+- Interactive debugger using [[https://github.com/emacs-lsp/dap-mode][dap-mode]]
 
 **** F#
 [[file:+lang/fsharp/README.org][+lang/fsharp/README.org]]
@@ -2407,6 +2459,25 @@ Features:
 - Configurable list of extensions to recognize as notes.
 - Zettelkasten system with [[https://github.com/EFLS/zetteldeft][zetteldeft]]
 
+** Djvu
+[[file:+readers/djvu/README.org][+readers/djvu/README.org]]
+
+This layer adds support for reading djvu files with spacemacs.
+
+Because of some difficulties, the layer does not lazy load the =djvu.el= and
+=djvu3.el= packages.
+
+Features:
+
+This layer provides a full featured djvu editor by implementing the [[https://github.com/dalanicolai/djvu2.el][djvu.el
+package]] along with the [[https://github.com/dalanicolai/djvu3][djvu3]] extension (a newer alternative to [[https://github.com/dalanicolai/djvu2.el][djvu2.el]]).
+- flexible annotation editing and rendering, covering most (but not all) of
+  [[https://linux.die.net/man/1/djvused][djvused]] annotation definitions
+- fast navigation with imenu
+- fast search with djvu-occur
+- remember last view with djvu-restore
+- dark mode
+
 ** Elfeed
 [[file:+readers/elfeed/README.org][+readers/elfeed/README.org]]
 
@@ -2485,21 +2556,24 @@ Features:
 - quick in buffer last commit message per line with [[https://github.com/syohex/emacs-git-messenger][git-messenger]]
 - colorize buffer line by age of commit with [[https://github.com/syohex/emacs-smeargle][smeargle]]
 - git grep with [[https://github.com/yasuyk/helm-git-grep][helm-git-grep]]
-- gitignore generator with [[https://github.com/jupl/helm-gitignore][helm-gitignore]]
 - org integration with magit via [[https://github.com/magit/orgit][orgit]]
 
-New to Magit? Checkout the [[https://magit.vc/about/][official intro]].
+New to Magit? Checkout the [[https://magit.vc/about/][official intro]] and [[https://practical.li/spacemacs/source-control/][Practicalli Spacemacs]]
+guide to configuring and using the Git and version control layers.
 
 ** GitHub
 [[file:+source-control/github/README.org][+source-control/github/README.org]]
 
-This layers adds support for [[http://github.com][GitHub]].
+*This layer is deprecated*.
+
+The layer had support searching for and cloning [[http://github.com][GitHub]] repositories,
+although that did not provide a secure way to store an access token
+to connect to GitHub.
+
+The git layer provides interaction with GitHub and can securely
+store the access token using PGP.
 
 Features:
-- [[https://github.com/magit/forge][forge]]: integration with various forges, such as GitHub and GitLab.
-- [[https://github.com/defunkt/gist.el][gist.el]]: full-featured mode to browse and post GitHub gists.
-- [[https://github.com/sshaw/git-link][git-link]]: quickly generate URLs for commits or files.
-- [[https://github.com/dgtized/github-clone.el][github-clone]] allows for easy cloning and forking of repositories.
 - [[https://github.com/seagle0128/grip-mode][grip-mode]] Github-flavored Markdown/Org preview using [[https://github.com/joeyespo/grip][Grip]].
 
 ** Perforce
@@ -3071,6 +3145,7 @@ Features:
 - Syntax highlighting
 - Auto completion
 - Syntax checking via =systemd-analyze=
+- Viewing systemd system and user unit via [[https://github.com/SebastianMeisel/journalctl-mode][journalctl-mode]]
 
 ** Tern
 [[file:+tools/tern/README.org][+tools/tern/README.org]]
@@ -3119,6 +3194,21 @@ This layer integrates a BitTorrent client into Spacemacs.
 
 Features:
 - Integration of [[https://transmissionbt.com/][Transmission]] into Emacs.
+
+** Tree-sitter
+[[file:+tools/tree-sitter/README.org][+tools/tree-sitter/README.org]]
+
+This layer integrates [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][=Emacs Tree-sitter=]] and a few packages built around it.
+An Emacs build supporting dynamic modules is required.
+
+Language (i.e. major-mode) support is somewhat limited and varies by feature.
+Refer to the README/documentation of the package providing the feature for
+specifics.
+
+Features:
+- Syntax highlighting
+- Indentation (experimental)
+- Folding (experimental)
 
 ** Vagrant
 [[file:+tools/vagrant/README.org][+tools/vagrant/README.org]]
@@ -3227,14 +3317,14 @@ Features:
 ** Eaf
 [[file:+tools/eaf/README.org][+tools/eaf/README.org]]
 
-This layer adds support for the [[https://github.com/manateelazycat/emacs-application-framework][Emacs Application Framework (EAF)]].
+This layer adds support for the [[https://github.com/emacs-eaf/emacs-application-framework][Emacs Application Framework (EAF)]].
 
 Features:
 - Browse using a full-fledged browser within Emacs
 - PDF viewer (with continuous scroll)
 - Video player
 - Image viewer
-- See [[https://github.com/manateelazycat/emacs-application-framework#launch-eaf-applications][EAF documentation]] for many more features
+- See [[https://github.com/emacs-eaf/emacs-application-framework#launch-eaf-applications][EAF documentation]] for many more features
 
 ** Evernote
 [[file:+web-services/evernote/README.org][+web-services/evernote/README.org]]
@@ -3246,6 +3336,34 @@ Features:
 - Create notes in markdown and sync with [[https://evernote.com/][Evernote]] via [[http://www.geeknote.me][geeknote]].
 - Search for notes using keywords
 - Move notes between notebooks
+
+** Hacker News
+[[file:+web-services/hackernews/README.org][+web-services/hackernews/README.org]]
+
+This layer adds support for reading [[https://news.ycombinator.com/][Hacker News]].
+
+Features:
+- Read Hacker News
+
+** Layer for reddit
+[[file:+web-services/reddit/README.org][+web-services/reddit/README.org]]
+
+This layer adds Reddit support to Spacemacs via the package [[https://github.com/thanhvg/emacs-reddigg][reddigg]].
+This package allows you to browse reddit in org-mode.
+
+Features:
+- Activities on Reddit
+  - Viewing main
+  - Viewing sub
+  - Viewing comments
+
+** Lobsters
+[[file:+web-services/lobsters/README.org][+web-services/lobsters/README.org]]
+
+This layer adds support for reading [[https://lobste.rs/][lobsters]].
+
+Features:
+- Read Lobsters news
 
 ** Pocket
 [[file:+web-services/pocket/README.org][+web-services/pocket/README.org]]
@@ -3267,6 +3385,25 @@ This layer adds support for the [[https://github.com/hrs/engine-mode][Search Eng
 
 Features:
 - Browser search integration
+
+** Streamlink
+[[file:+web-services/streamlink/README.org][+web-services/streamlink/README.org]]
+
+This layer adds support for opening URLs in streamlink.
+
+Features:
+- Open URL with streamlink
+
+** Twitch
+[[file:+web-services/twitch/README.org][+web-services/twitch/README.org]]
+
+This layer adds support for twitch. You can search for streamers and open the stream in the browser.
+You are also able to connect to twitch irc and join the streamer channel.
+
+Features:
+- Connect to Twitch irc via erc
+- Join streamer channel
+- Start watching stream via streamlink
 
 ** Twitter
 [[file:+web-services/twitter/README.org][+web-services/twitter/README.org]]

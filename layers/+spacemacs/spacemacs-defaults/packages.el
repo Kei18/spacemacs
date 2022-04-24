@@ -21,45 +21,45 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(setq spacemacs-defaults-packages
-      '(
-        (abbrev :location built-in)
-        (archive-mode :location built-in)
-        (bookmark :location built-in)
-        (buffer-menu :location built-in)
-        (conf-mode :location built-in)
-        (cus-edit :location built-in
-                  :toggle (or (eq 'vim dotspacemacs-editing-style)
-                              (eq 'hybrid dotspacemacs-editing-style)))
-        (dired :location built-in)
-        (dired-x :location built-in)
-        (display-line-numbers :location built-in
-                              :toggle (version<= "26" emacs-version))
-        (electric-indent-mode :location built-in)
-        (ediff :location built-in)
-        (eldoc :location built-in)
-        (help-fns+ :location local)
-        (hi-lock :location built-in)
-        (image-mode :location built-in)
-        (imenu :location built-in)
-        (occur-mode :location built-in)
-        (package-menu :location built-in)
-        ;; page-break-lines is shipped with spacemacs core
-        (page-break-lines :location built-in)
-        (process-menu :location built-in)
-        quickrun
-        (recentf :location built-in)
-        (savehist :location built-in)
-        (saveplace :location built-in)
-        (subword :location built-in)
-        (tar-mode :location built-in)
-        (uniquify :location built-in)
-        (url :location built-in)
-        (visual-line-mode :location built-in)
-        (whitespace :location built-in)
-        (winner :location built-in)
-        (xref :location built-in)
-        (zone :location built-in)))
+(defconst spacemacs-defaults-packages
+  '(
+    (abbrev :location built-in)
+    (archive-mode :location built-in)
+    (bookmark :location built-in)
+    (buffer-menu :location built-in)
+    (conf-mode :location built-in)
+    (cus-edit :location built-in
+              :toggle (or (eq 'vim dotspacemacs-editing-style)
+                          (eq 'hybrid dotspacemacs-editing-style)))
+    (dired :location built-in)
+    (dired-x :location built-in)
+    (image-dired :location built-in)
+    (display-line-numbers :location built-in)
+    (electric-indent-mode :location built-in)
+    (ediff :location built-in)
+    (eldoc :location built-in)
+    (help-fns+ :location local)
+    (hi-lock :location built-in)
+    (image-mode :location built-in)
+    (imenu :location built-in)
+    (occur-mode :location built-in)
+    (package-menu :location built-in)
+    ;; page-break-lines is shipped with spacemacs core
+    (page-break-lines :location built-in)
+    (process-menu :location built-in)
+    quickrun
+    (recentf :location built-in)
+    (savehist :location built-in)
+    (saveplace :location built-in)
+    (subword :location built-in)
+    (tar-mode :location built-in)
+    (uniquify :location built-in)
+    (url :location built-in)
+    (visual-line-mode :location built-in)
+    (whitespace :location built-in)
+    (winner :location built-in)
+    (xref :location built-in)
+    (zone :location built-in)))
 
 
 ;; Initialization of packages
@@ -115,6 +115,9 @@
   ;;   `scroll-up-command'. Evil `C-d' works instead.
   ;; - `C-x' as a prefix command still works.
   ;; - `C-c' as a prefix command still works.
+  ;; - Activating normal-mode makes evil override the custom-mode-map normal-state
+  ;;   its mouse button bindings. So we bind them explicitly in normal-state
+  (evil-define-key 'normal 'custom-mode-map [down-mouse-1] 'widget-button-click)
   ;; - `u' as `Custom-goto-parent' conflicts with Evil undo. However it is
   ;;   questionable whether this will work properly in a Custom buffer;
   ;;   choosing to restore this binding.
@@ -151,6 +154,20 @@
     :commands (dired-jump
                dired-jump-other-window
                dired-omit-mode)))
+
+(defun spacemacs-defaults/init-image-dired ()
+  (use-package image-dired
+    :defer t
+    :config
+    (evilified-state-evilify-map image-dired-thumbnail-mode-map
+      :mode image-dired-thumbnail-mode
+      :bindings
+      "j" 'image-dired-next-line
+      "k" 'image-dired-previous-line
+      "l" 'image-dired-forward-image
+      "h" 'image-dired-backward-image)
+    (evilified-state-evilify-map image-dired-display-image-mode-map
+      :mode image-dired-display-image-mode)))
 
 (defun spacemacs-defaults/init-electric-indent-mode ()
   (electric-indent-mode))
@@ -215,7 +232,10 @@
 (defun spacemacs-defaults/init-help-fns+ ()
   (use-package help-fns+
     :commands (describe-keymap)
-    :init (spacemacs/set-leader-keys "hdK" 'describe-keymap)))
+    :init
+    (progn
+      (spacemacs/set-leader-keys "hdK" 'describe-keymap)
+      (advice-add 'help-do-xref :after (lambda (_pos _func _args) (setq-local tab-width 8))))))
 
 (defun spacemacs-defaults/init-hi-lock ()
   (with-eval-after-load 'hi-lock
@@ -272,18 +292,17 @@
 
       (spacemacs/declare-prefix "tn" "line-numbers")
 
-      ;; backwards compatibility of symbols:
-      ;; keep the spacemacs/toggle-line-numbers & friends around
       (spacemacs|add-toggle line-numbers
         :status (and (featurep 'display-line-numbers)
                      display-line-numbers-mode
-                     (eq display-line-numbers t))
+                     (eq display-line-numbers dotspacemacs-line-numbers))
         :on (prog1 (display-line-numbers-mode)
-              (setq display-line-numbers t))
+              (setq display-line-numbers dotspacemacs-line-numbers))
         :off (display-line-numbers-mode -1)
-        :on-message "Absolute line numbers enabled."
+        :on-message "Line numbers enabled per dotspacemacs-line-numbers."
         :off-message "Line numbers disabled."
-        :documentation "Show the line numbers.")
+        :documentation "Show line numbers as configured in .spacemacs."
+        :evil-leader "tnn")
       (spacemacs|add-toggle absolute-line-numbers
         :status (and (featurep 'display-line-numbers)
                      display-line-numbers-mode
@@ -293,7 +312,7 @@
         :off (display-line-numbers-mode -1)
         :on-message "Absolute line numbers enabled."
         :off-message "Line numbers disabled."
-        :documentation "Show the line numbers."
+        :documentation "Show absolute line numbers."
         :evil-leader "tna")
       (spacemacs|add-toggle relative-line-numbers
         :status (and (featurep 'display-line-numbers)
@@ -374,7 +393,10 @@
   (spacemacs|hide-lighter page-break-lines-mode))
 
 (defun spacemacs-defaults/init-process-menu ()
-  (evilified-state-evilify process-menu-mode process-menu-mode-map))
+  (evilified-state-evilify-map process-menu-mode-map
+    :mode process-menu-mode
+    :bindings
+    "gr" 'revert-buffer))
 
 (defun spacemacs-defaults/init-quickrun ()
   (use-package quickrun

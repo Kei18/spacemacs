@@ -5,7 +5,7 @@
 ;; Author: Nasser Alshammari
 ;; URL: <https://github.com/nashamri/spacemacs-theme>
 ;;
-;; Version: 0.1
+;; Version: 0.2
 ;; Keywords: color, theme
 ;; Package-Requires: ((emacs "24"))
 
@@ -760,6 +760,8 @@ to 'auto, tags may not be properly aligned. "
      `(org-done ((,class (:foreground ,suc :inherit bold :background ,green-bg))))
      `(org-ellipsis ((,class (:foreground ,keyword))))
      `(org-footnote  ((,class (:underline t :foreground ,base))))
+     `(org-headline-done ((,class (:foreground ,aqua))))
+     `(org-headline-todo ((,class (:foreground ,meta))))
      `(org-hide ((,class (:foreground ,base))))
      `(org-kbd ((,class (:inherit region :foreground ,base :box (:line-width 1 :style released-button)))))
      `(org-level-1 ((,class (:inherit bold :bold ,(if spacemacs-theme-org-bold 'unspecified nil) :foreground ,head1 :height ,(if spacemacs-theme-org-height 1.3 1.0) :background ,(when spacemacs-theme-org-highlight head1-bg)))))
@@ -942,8 +944,12 @@ to 'auto, tags may not be properly aligned. "
 ;;;;; tab-bar-mode
      `(tab-bar ((,class (:foreground ,base :background ,bg1))))
      `(tab-bar-tab ((,class (:foreground ,base :background ,bg1 :weight bold))))
-     `(tab-line ((,class (:foreground ,base :background ,bg1))))
      `(tab-bar-tab-inactive ((,class (:foreground ,base-dim :background ,bg2 :weight light))))
+
+;;;;; tab-line-mode
+     `(tab-line ((,class (:foreground ,base :background ,bg1))))
+     `(tab-line-tab-current ((,class (:foreground ,base :background ,bg1 :weight bold))))
+     `(tab-line-tab-inactive ((,class (:foreground ,base-dim :background ,bg2 :weight light))))
 
 ;;;;; web-mode
      `(web-mode-builtin-face ((,class (:inherit ,font-lock-builtin-face))))
@@ -1029,7 +1035,9 @@ to 'auto, tags may not be properly aligned. "
                                ("FIXME"       . ,war)
                                ("XXX+"        . ,war)
                                ("\\?\\?\\?+"  . ,war)))
-
+;;;;; org
+     `(org-fontify-done-headline nil)
+     `(org-fontify-todo-headline nil)
 
 ;;;;; pdf-tools
     `(pdf-view-midnight-colors '(,base . ,bg1)))

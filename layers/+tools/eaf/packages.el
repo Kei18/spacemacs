@@ -20,36 +20,23 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 (defconst eaf-packages
-  '(ctable
-    deferred
-    epc
-    ;; s
-    (eaf :location (recipe
+  '((eaf :location (recipe
                     :fetcher github
-                    :repo  "manateelazycat/emacs-application-framework"
-                    :files ("*")))))
-
-(defun eaf/init-ctable ()
-  (use-package ctable))
-
-(defun eaf/init-deferred ()
-  (use-package deferred))
-
-(defun eaf/init-epc ()
-  (use-package epc))
-
-;; (defun eaf/init-s ()
-;;   (use-package s))
+                    :repo  "emacs-eaf/emacs-application-framework"
+                    :files ("*" "core/*.el" "extension/*.el")))))
 
 (defun eaf/init-eaf ()
   (use-package eaf
-    :defer t
     :init
     (progn
-      (spacemacs/declare-prefix "aa" "application-framework")
-      (spacemacs/set-leader-keys "aac" 'eaf-camera)
+      (spacemacs/declare-prefix
+        "aa"  "application-framework"
+        "aab" "browser"
+        "aabq" "quick-launch-website"
+        "aam" "mindmap")
+
+      (spacemacs/set-leader-keys "aac" 'eaf-open-camera)
       (spacemacs/set-leader-keys "aaf" 'eaf-open)
       (spacemacs/set-leader-keys "aaj" 'eaf-open-jupyter)
       (spacemacs/set-leader-keys "aao" 'eaf-open-office)
@@ -57,18 +44,14 @@
       (spacemacs/set-leader-keys "aas" 'eaf-open-system-monitor)
       (spacemacs/set-leader-keys "aaM" 'eaf-open-music-player)
 
-      (spacemacs/declare-prefix "aab" "browser")
       (spacemacs/set-leader-keys "aabo" 'eaf-open-browser)
       (spacemacs/set-leader-keys "aabs" 'eaf-search-it)
       (spacemacs/set-leader-keys "aabb" 'eaf-open-bookmark)
       (spacemacs/set-leader-keys "aabh" 'eaf-open-browser-with-history)
 
-      (spacemacs/declare-prefix "aabq" "quick-launch-website")
       (spacemacs/set-leader-keys "aabqd" 'duckduckgo)
       (spacemacs/set-leader-keys "aabqw" 'wikipedia)
       (spacemacs/set-leader-keys "aabqy" 'youtube)
-
-      (spacemacs/declare-prefix "aam" "mindmap")
       (spacemacs/set-leader-keys "aamc" 'eaf-create-mindmap)
       (spacemacs/set-leader-keys "aamm" 'eaf-open-mindmap)
 
@@ -160,7 +143,6 @@
               ("<f12>" . "open_devtools")
               ("<C-return>" . "eaf-send-ctrl-return-sequence")))
 
-
       (setq eaf-pdf-viewer-keybinding
             '(("j" . "scroll_up")
               ("<down>" . "scroll_up")
@@ -210,8 +192,10 @@
     ;; ("<C-iso-lefttab>" . "select_right_tab")
     :config
     (progn
+      (dolist (app eaf-apps)
+        (require app nil 'noerror))
       (setq browse-url-browser-function 'eaf-open-browser)
-      (eaf-setq eaf-browser-enable-adblocker "true")
+      (setq eaf-browser-enable-adblocker "true")
 
       (define-key eaf-mode-map* (kbd "C-SPC C-SPC") 'execute-extended-command)
       ;;;; TODO need to consider the current pdf view mode which does not need to be pdf view mode
@@ -240,7 +224,7 @@
               (pcase eaf--buffer-app-name
                 ((or
                   (and "browser"
-                       (guard (not (string= (eaf-call-sync "call_function" eaf--buffer-id "is_focus") "True"))))
+                       (guard (not (eaf-call-sync "execute_function" eaf--buffer-id "is_focus"))))
                   "image-viewer"
                   "pdf-viewer")
                  (kbd eaf-evil-leader-key))
@@ -261,6 +245,6 @@
       (define-key key-translation-map (kbd ",")
         (lambda (prompt)
           (if (derived-mode-p 'eaf-mode)
-              (if (string= (eaf-call-sync "call_function" eaf--buffer-id "is_focus") "True")
+              (if (eaf-call-sync "execute_function" eaf--buffer-id "is_focus")
                   (kbd ",")
                 (kbd "C-,"))))))))

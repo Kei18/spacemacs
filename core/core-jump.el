@@ -77,8 +77,7 @@ They are in order: `spacemacs-jump-handlers',
           (old-point (point)))
       (dolist (-handler (spacemacs//get-jump-handlers))
         (let ((handler (if (listp -handler) (car -handler) -handler))
-              (async (when (listp -handler)
-                       (plist-get (cdr -handler) :async))))
+              (async (plist-get (cdr-safe -handler) :async)))
           (ignore-errors
             (call-interactively handler))
           (when (or (eq async t)

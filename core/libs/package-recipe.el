@@ -1,6 +1,6 @@
 ;;; package-recipe.el --- Package recipes as EIEIO objects  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2018-2021  Jonas Bernoulli
+;; Copyright (C) 2018-2022  Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 
@@ -29,6 +29,7 @@
 ;;; Code:
 
 (require 'eieio)
+(require 'url-parse)
 
 (defvar package-build-recipes-dir)
 (defvar package-build-working-dir)
@@ -59,6 +60,13 @@
   (or (oref rcp url)
       (format (oref rcp url-format)
               (oref rcp repo))))
+
+(cl-defmethod package-recipe--upstream-protocol ((rcp package-recipe))
+  (let ((url (package-recipe--upstream-url rcp)))
+    (cond ((string-match "\\`\\([a-z]+\\)://" url)
+           (match-string 1 url))
+          ((string-match "\\`[^:/ ]+:" url) "ssh")
+          (t "file"))))
 
 (cl-defmethod package-recipe--fetcher ((rcp package-recipe))
   (substring (symbol-name (eieio-object-class rcp)) 8 -7))

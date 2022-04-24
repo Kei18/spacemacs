@@ -21,35 +21,34 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(setq git-packages
-      '(
-        evil-collection
-        fill-column-indicator
-        ;; forge requires a C compiler on Windows so we disable
-        ;; it by default on Windows.
-        (forge :toggle (not (spacemacs/system-is-mswindows)))
-        gitattributes-mode
-        gitconfig-mode
-        gitignore-mode
-        gitignore-templates
-        git-commit
-        git-link
-        git-messenger
-        git-timemachine
-        golden-ratio
-        (helm-git-grep :requires helm)
-        (helm-gitignore :requires helm)
-        magit
-        (magit-delta :toggle git-enable-magit-delta-plugin)
-        (magit-gitflow :toggle git-enable-magit-gitflow-plugin)
-        magit-section
-        (magit-svn :toggle git-enable-magit-svn-plugin)
-        (magit-todos :toggle git-enable-magit-todos-plugin)
-        org
-        (orgit :requires org)
-        (orgit-forge :requires (org forge))
-        smeargle
-        transient))
+(defconst git-packages
+  '(
+    evil-collection
+    evil-surround
+    fill-column-indicator
+    ;; forge requires a C compiler on Windows so we disable
+    ;; it by default on Windows.
+    (forge :toggle (not (spacemacs/system-is-mswindows)))
+    ;; include the old git{attributes,config,ignore}-mode
+    git-modes
+    gitignore-templates
+    git-commit
+    git-link
+    git-messenger
+    git-timemachine
+    golden-ratio
+    (helm-git-grep :requires helm)
+    magit
+    (magit-delta :toggle git-enable-magit-delta-plugin)
+    (magit-gitflow :toggle git-enable-magit-gitflow-plugin)
+    magit-section
+    (magit-svn :toggle git-enable-magit-svn-plugin)
+    (magit-todos :toggle git-enable-magit-todos-plugin)
+    org
+    (orgit :requires org)
+    (orgit-forge :requires (org forge))
+    smeargle
+    transient))
 
 
 (defun git/pre-init-golden-ratio ()
@@ -57,9 +56,18 @@
     :post-config
     (add-to-list 'golden-ratio-exclude-buffer-names " *transient*")))
 
+;; evil-surround bindings interfere with line-wise staging
+(defun git/post-init-evil-surround ()
+  (spacemacs|use-package-add-hook magit
+    :post-config
+    (add-hook 'magit-status-mode-hook #'turn-off-evil-surround-mode)))
+
 (defun git/pre-init-evil-collection ()
   (when (spacemacs//support-evilified-buffer-p)
-    (add-to-list 'spacemacs-evil-collection-allowed-list 'magit)))
+    (add-to-list 'spacemacs-evil-collection-allowed-list 'magit)
+    ;; See `git-packages' form in this file.
+    (unless (spacemacs/system-is-mswindows)
+      (add-to-list 'spacemacs-evil-collection-allowed-list 'forge))))
 
 (defun git/post-init-fill-column-indicator ()
   (add-hook 'git-commit-mode-hook 'fci-mode))
@@ -70,11 +78,6 @@
     :init (spacemacs/set-leader-keys
             "g/" 'helm-git-grep
             "g*" 'helm-git-grep-at-point)))
-
-(defun git/init-helm-gitignore ()
-  (use-package helm-gitignore
-    :defer t
-    :init (spacemacs/set-leader-keys "gI" 'helm-gitignore)))
 
 (defun git/init-git-commit ()
   (use-package git-commit
@@ -131,16 +134,8 @@
         ("Y" git-timemachine-kill-revision)
         ("q" nil :exit t)))))
 
-(defun git/init-gitattributes-mode ()
-  (use-package gitattributes-mode
-    :defer t))
-
-(defun git/init-gitconfig-mode ()
-  (use-package gitconfig-mode
-    :defer t))
-
-(defun git/init-gitignore-mode ()
-  (use-package gitignore-mode
+(defun git/init-git-modes ()
+  (use-package git-modes
     :defer t))
 
 (defun git/init-gitignore-templates ()
@@ -155,6 +150,7 @@
 (defun git/init-magit ()
   (use-package magit
     :defer (spacemacs/defer)
+    :custom (magit-bury-buffer-function #'magit-restore-window-configuration)
     :init
     (progn
       (push "magit: .*" spacemacs-useless-buffers-regexp)

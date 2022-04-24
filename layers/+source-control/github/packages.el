@@ -20,59 +20,16 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;; Package deprecation notice shown at startup
+(warn "`github' layer is deprecated. See layer README.org for details.")
 
-(setq github-packages
-      '(
-        gist
-        github-clone
-        github-search
-        grip-mode
-        ;; this package does not exits, we need it to wrap
-        ;; the call to spacemacs/declare-prefix.
-        (spacemacs-github :location built-in)
-        ))
 
-(defun github/init-gist ()
-  (use-package gist
-    :defer t
-    :init
-    (progn
-      (spacemacs/declare-prefix "gg" "github gist")
-      (spacemacs/set-leader-keys
-        "ggb" 'gist-buffer
-        "ggB" 'gist-buffer-private
-        "ggl" 'gist-list
-        "ggr" 'gist-region
-        "ggR" 'gist-region-private))
-    :config
-    (progn
-      (evilified-state-evilify-map gist-list-menu-mode-map
-        :mode gist-list-mode
-        :bindings
-        "f" 'gist-fetch-current
-        "K" 'gist-kill-current
-        "o" 'gist-browse-current-url)
-      (evilified-state-evilify-map gist-list-mode-map
-        :mode gist-list-mode
-        :bindings
-        (kbd "gr") 'gist-list-reload))))
-
-(defun github/init-github-clone ()
-  (use-package github-clone
-    :defer t
-    :init
-    (progn
-      (spacemacs/declare-prefix "ghc" "clone")
-      (spacemacs/set-leader-keys
-        "ghcc" 'github-clone
-        "ghcr" 'github-clone-add-existing-remote
-        "ghcf" 'github-clone-fork-remote
-        "ghcu" 'github-clone-add-source-remote))))
-
-(defun github/init-github-search ()
-  (use-package github-search
-    :commands (github-search-clone-repo github-search-user-clone-repo)
-    :init (spacemacs/set-leader-keys "ghc/" 'github-search-clone-repo)))
+(defconst github-packages
+  '(
+    grip-mode
+    ;; this package does not exits, we need it to wrap
+    ;; the call to spacemacs/declare-prefix.
+    (spacemacs-github :location built-in)))
 
 (defun github/init-grip-mode ()
   (use-package grip-mode

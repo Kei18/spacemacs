@@ -216,6 +216,12 @@ Spacemacs buffer."
   'boolean
   'spacemacs-dotspacemacs-init)
 
+(spacemacs|defc dotspacemacs-startup-buffer-show-icons t
+  "If true, show file icons for entries and headings on spacmeacs buffer.
+This has no effect in terminal or if \"all-the-icons\" is not installed."
+  'boolean
+  'spacemacs-dotspacemacs-init)
+
 (spacemacs|defc dotspacemacs-scratch-mode 'text-mode
   "Default major mode of the scratch buffer."
   'symbol
@@ -914,7 +920,7 @@ a display strng and the value is the actual value to return."
       (configuration-layer/load))))
 
 (defun dotspacemacs/install (arg)
-  "Install the dotfile, return non nil if the doftile has been installed.
+  "Install the dotfile, return non nil if the dotfile has been installed.
 
 If ARG is non nil then ask questions to the user before installing the dotfile."
   (interactive "P")

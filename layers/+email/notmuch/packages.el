@@ -131,6 +131,8 @@
         (kbd "D") 'spacemacs/notmuch-tree-message-delete-up
         (kbd "n") 'notmuch-tree-next-matching-message
         (kbd "p") 'notmuch-tree-prev-matching-message
+        (kbd "M-d") 'notmuch-tree-scroll-message-window
+        (kbd "M-u") 'notmuch-tree-scroll-message-window-back
         (kbd "M") 'compose-mail-other-frame)
       (evilified-state-evilify-map notmuch-search-mode-map
         :mode notmuch-search-mode
@@ -145,7 +147,9 @@
         (kbd "gr") 'notmuch-refresh-this-buffer
         (kbd "gR") 'notmuch-refresh-all-buffers
         (kbd "G") 'notmuch-search-last-thread
-        (kbd "M") 'compose-mail-other-frame))))
+        (kbd "M") 'compose-mail-other-frame)
+
+      (spacemacs|add-company-backends :backends notmuch-company :modes notmuch-message-mode))))
 
 (defun notmuch/pre-init-org ()
   (spacemacs|use-package-add-hook org
